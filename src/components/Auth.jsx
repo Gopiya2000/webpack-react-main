@@ -64,11 +64,10 @@ const Auth = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <Box className='classes.submitForm' >
+        <Box className={classes.submitForm} >
           <Typography variant='h4'style={fieldTypography}>
             {isSignup ? "Signup" : "Login"}
           </Typography>
-          {/* <Grid container></Grid> */}
           {isSignup && <TextField name='name' onChange={handleChange} value={inputs.name} placeholder='name' margin='normal' />}
           {isSignup && <TextField name='email' onChange={handleChange} value={inputs.email} type={"email"} placeholder='email' margin='normal' />}
           <TextField name='username' onChange={handleChange} value={inputs.username} placeholder='username' margin='normal' />

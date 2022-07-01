@@ -8,7 +8,7 @@ export const useStyles = makeStyles(() => ({
       color:'warning'
     },
     submitForm : {
-      maxWidth:'400',
+      maxWidth:400,
       display:'flex',
       flexDirection:'column',
       alignItems:'center',
@@ -17,8 +17,7 @@ export const useStyles = makeStyles(() => ({
       padding:3,
       margin:'auto',
       marginTop:5,
-      borderRadius:5,
-      color:'warning'
+      borderRadius:7
     }
   }))
 // export let loginForm = {
