@@ -12,14 +12,16 @@ const Blogs = () => {
       return data;
     }
     useEffect(() => {
-      sendRequest().then(data=> setBlogs(data.blogs));
+      console.log("ENTER");
+      sendRequest().then(data=> console.log(blogs));
    },[]);
    console.log(blogs);
   return (
     <div>
-      {blogs && blogs.map((blog,index) => 
-        <Blog />
-      )}
+      <Blog />
+      {/* {blogs && blogs.map((blog,index) => 
+        <Blog title={blog.title} content={blog.content} image={blog.image} tag={blog.tag} user={blog.User.name}/>
+      )} */}
     </div>
   )
 }

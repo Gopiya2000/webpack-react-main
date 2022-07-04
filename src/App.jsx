@@ -11,8 +11,8 @@ import Blogs from "./components/Home";
 
 
 function App() {
-  const isLoggedIn = useSelector(state => state.isLoggedIn);
-  console.log(isLoggedIn);
+  const login = useSelector(state => state.login);
+  console.log(login);
   return <React.Fragment >
     
     <header>

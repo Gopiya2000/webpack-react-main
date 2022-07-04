@@ -40,9 +40,9 @@ export const useStyles = makeStyles(() => ({
 export let appBar = {
     backgroundColor : '#2E3B55'
 }
-export let loginTabs = {
-  textColor: 'inherit'
-}
+// export let loginTabs = {
+//   textColor: 'inherit'
+// }
 export let loginBox = {
   display:"flex",
    marginLeft:'auto',

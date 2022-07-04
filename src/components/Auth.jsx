@@ -1,17 +1,19 @@
 import { Button, TextField, Typography, Box } from '@mui/material';
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { authActions } from '../store';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector,useDispatch } from 'react-redux';
+//import { authActions } from '../store';
+//import { useNavigate } from 'react-router';
 import {useStyles,fieldTypography,authSubmit,changeButton} from '../styles/styles';
-
+import { setLogin, setSignOut, toggleSignup } from './redux/authActions';
 
 const Auth = () => {
   const classes = useStyles()
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [inputs, setInputs] = useState({
+  const signup = useSelector( state => state.signup )
+  const [Inputs, setInputs] = useState({
     name: "",
     email: "",
     username: "",
@@ -20,45 +22,57 @@ const Auth = () => {
     password: "",
     confirm: ""
   })
-  const [isSignup, setIsSignup] = useState(false)
-  const handleChange = (e) => {
-    setInputs((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value
-    }))
-  }
-
+  // const [signup, setsignup] = useState(false)
+  // const handleChange = (e) => {
+  //   setInputs((prevState) => ({
+  //     ...prevState,
+  //     [e.target.name]: e.target.value
+  //   }))
+  // }
+  //const { name,email,username,mobile,date,password,confirm} = Inputs;
   const sendRequest = async (type="login") => {
+    console.log("signup")
     const res = await axios.post(`http://localhost:4567/api/user/${type}`, {
-      name: inputs.name,
-      email: inputs.email,
-      username: inputs.username,
-      mobile: inputs.mobile,
-      date: inputs.date,
-      password: inputs.password,
-      confirm: inputs.confirm
+      name: Inputs.name,
+      email: Inputs.email,
+      username: Inputs.username,
+      mobile: Inputs.mobile,
+      date: Inputs.date,
+      password: Inputs.password,
+      confirm: Inputs.confirm
     }
     ).catch((err) => console.log(err));
     const data = await res.data;
+    console.log("data : ",data)
     return data;
   };
 
+  const handleChange = (e) => {
+    setInputs((prevState) => ({
+      ...prevState,
+      [e.target.name] : e.target.value
+    }))
+  }
+  const signupHandler = () => {
+    dispatch(toggleSignup())
+  }
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(inputs);
-    if(isSignup){
+    console.log(Inputs);
+    if(signup){
       sendRequest("signup")
-      .then(()=>dispatch(authActions.login()))
-      .then(()=>navigate("/blogs"))
+      .then(()=>{console.log("ho")
+        dispatch(setSignOut())})
       .then(data => console.log(data))
+      navigate("/auth")
     }
     else{
       sendRequest()
-      .then(()=>dispatch(authActions.login()))
-      .then(()=>navigate("/blogs"))
+      .then(()=>dispatch(setLogin()))
       .then(data => console.log(data))
+      navigate("/blogs")
     }
   }
   return (
@@ -66,28 +80,19 @@ const Auth = () => {
       <form onSubmit={handleSubmit}>
         <Box className={classes.submitForm} >
           <Typography variant='h4'style={fieldTypography}>
-            {isSignup ? "Signup" : "Login"}
+            {signup ? "Signup" : "Login"}
           </Typography>
-          {isSignup && <TextField name='name' onChange={handleChange} value={inputs.name} placeholder='name' margin='normal' />}
-          {isSignup && <TextField name='email' onChange={handleChange} value={inputs.email} type={"email"} placeholder='email' margin='normal' />}
-          <TextField name='username' onChange={handleChange} value={inputs.username} placeholder='username' margin='normal' />
-          {isSignup && <TextField name='mobile' onChange={handleChange} value={inputs.mobile} placeholder='mobile' margin='normal' />}
-          {isSignup && <TextField name='date' onChange={handleChange} value={inputs.date} placeholder='date' margin='normal' />}
-          <TextField name='password' onChange={handleChange} value={inputs.password} type={'password'} placeholder='password' margin='normal' />
-          {isSignup && <TextField name='confirm' onChange={handleChange} value={inputs.confirm} type={'password'} placeholder='confirm password' margin='normal' />}
-          <Button
-            type='submit'
-            variant='contained'
-            style={authSubmit}
-          >
-            Submit
-          </Button>
-          <Button
-            onClick={() => setIsSignup(!isSignup)}
-            style={changeButton}
-          >
-            Change To {isSignup ? "Login" : "Signup"}
-          </Button>
+          {signup && <TextField name='name' onChange={handleChange} value={Inputs.name} placeholder='name' margin='normal' required />}
+          {signup && <TextField name='email' onChange={handleChange} value={Inputs.email} type={"email"} placeholder='email' margin='normal' required />}
+          <TextField name='username' onChange={handleChange} value={Inputs.username} placeholder='username' margin='normal' required />
+          {signup && <TextField name='mobile' onChange={handleChange} value={Inputs.mobile} placeholder='mobile' margin='normal' required />}
+          {signup && <TextField name='date' onChange={handleChange} value={Inputs.date} placeholder='date' margin='normal' required />}
+          <TextField name='password' onChange={handleChange} value={Inputs.password} type={'password'} placeholder='password' margin='normal' required />
+          {signup && <TextField name='confirm' onChange={handleChange} value={Inputs.confirm} type={'password'} placeholder='confirm password' margin='normal' required />}
+          <Button type='submit' variant='contained'style={authSubmit}>{ signup ? "Signup" : "Login"}</Button>
+          {/* <Button onClick={() => setsignup(!signup)}style={changeButton}> </Button> */}
+          { !signup && <Typography>Don't have an account ?</Typography> }
+          <Link onClick={signupHandler} to='/auth'>{ !signup && "Signup"}</Link>
         </Box>
       </form>
     </div>
